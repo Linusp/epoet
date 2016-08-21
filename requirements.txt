@@ -1,0 +1,7 @@
+numpy==1.11.1
+pandas==0.18.1
+h5py==2.6.0
+Theano==0.8.2
+Keras==1.0.5
+click==6.6
+-e git+https://github.com/farizrahman4u/seq2seq#seq2seq
