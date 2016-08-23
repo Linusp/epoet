@@ -41,7 +41,7 @@ class LanguageModel(object):
         dict_file = model_prefix + self._MODEL_DICT_
 
         self.model_ = model_from_json(open(struct_file, 'r').read())
-        self.model_.compile(loss="categorical_crossentropy", optimizer='adam')
+        self.model_.compile(loss="categorical_crossentropy", optimizer=RMSprop(lr=0.01))
         self.model_.load_weights(weights_file)
         self.dict_ = json.load(open(dict_file, 'r'))
         self.inv_dict_ = {v: k for k, v in self.dict_.iteritems()}
@@ -58,16 +58,16 @@ class LanguageModel(object):
 
     def build_model(self, input_size, hidden_size):
         self.model_ = Sequential()
-        self.model_.add(GRU(input_dim=input_size, output_dim=hidden_size, return_sequences=True))
-        self.model_.add(TimeDistributed(Dense(output_dim=input_size, activation="softmax")))
-        self.model_.compile(loss='categorical_crossentropy', optimizer=RMSprop(lr=0.1))
+        self.model_.add(GRU(input_dim=input_size, output_dim=hidden_size))
+        self.model_.add(Dense(output_dim=input_size, activation="softmax"))
+        self.model_.compile(loss='categorical_crossentropy', optimizer=RMSprop(lr=0.01))
 
-    def train(self, corpus, batch_size=128, epoch=10):
+    def train(self, corpus, batch_size=128, nb_epoch=10):
         """corpus is a list of sentences."""
         self.dict_ = {k: v for k, v in corpus.dict_.iteritems()}
         self.inv_dict_ = {v: k for k, v in self.dict_.iteritems()}
 
-        self.model_.fit_generator(generate_from_corpus(corpus, 128), 128, 100)
+        self.model_.fit_generator(generate_from_corpus(corpus, batch_size), batch_size, nb_epoch)
 
     def sample(self, begin_symbol=None, length=10):
-        
+        pass

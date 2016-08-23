@@ -20,5 +20,5 @@ for poetry in origin_data:
 
 data = Corpus(corpus)
 lm = LanguageModel()
-lm.build_model(len(data.dict_), 1024)
+lm.build_model(len(data.dict_), 400)
 lm.train(data)

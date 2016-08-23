@@ -42,4 +42,5 @@ class Corpus(object):
                 data[i % batch_size, len(sent):] = np_utils.to_categorical([0] * remain_len, dict_size)
 
             if (i + 1) % batch_size == 0:
+                print u''.join([self.dict_.get(idx) for idx in sent])
                 yield data
